@@ -1,0 +1,144 @@
+openapi: 3.0.0
+info:
+  title: Dentist Appointment API
+  version: 1.0.0
+  description: RESTful API for managing appointments with a dentist
+
+servers:
+  - url: http://localhost:3000  # Update with your actual server URL
+
+paths:
+  /appointments:
+    post:
+      summary: Create Appointment
+      operationId: createAppointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppointmentRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+
+    get:
+      summary: Get Appointments for a Specific Date
+      operationId: getAppointments
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Date in YYYY-MM-DD format
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Appointment'
+
+  /appointments/{appointmentId}:
+    get:
+      summary: Get Appointment Details
+      operationId: getAppointmentById
+      parameters:
+        - name: appointmentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+
+    put:
+      summary: Update Appointment
+      operationId: updateAppointment
+      parameters:
+        - name: appointmentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppointmentRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+
+    delete:
+      summary: Delete Appointment
+      operationId: deleteAppointment
+      parameters:
+        - name: appointmentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Appointment deleted successfully
+
+components:
+  schemas:
+    Appointment:
+      type: object
+      properties:
+        id:
+          type: string
+        professional:
+          type: string
+        clientName:
+          type: string
+        appointmentTime:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+        reason:
+          type: string
+
+    AppointmentRequest:
+      type: object
+      properties:
+        professional:
+          type: string
+        clientName:
+          type: string
+        appointmentTime:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+        reason:
+          type: string
