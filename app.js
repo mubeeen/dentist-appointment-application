@@ -15,6 +15,7 @@ const http = require('http');
 //routes import 
 
 const userRoutes = require('./routes/user');
+const appointmentRoutes = require('./routes/appointment');
 
 //apps
 
@@ -37,7 +38,7 @@ app.use(cookieParser());
 app.use(expressValidator());
 
 //route definition
-app.use("/", userRoutes );
+app.use("/", userRoutes, appointmentRoutes );
 
 //swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiDocument));

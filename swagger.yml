@@ -5,9 +5,25 @@ info:
   description: RESTful API for managing appointments with a dentist
 
 servers:
-  - url: http://localhost:3000  # Update with your actual server URL
+  - url: http://localhost:8080  # Update with your actual server URL
 
 paths:
+  /login:
+    post:
+      summary: Authenticate and log in a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithToken'
   /appointments:
     post:
       summary: Create Appointment
@@ -46,6 +62,42 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Appointment'
+
+  
+  /appointments/name:
+    get:
+      summary: Get appointments by client name
+      parameters:
+        - name: clientName
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The name of the client
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Appointment'
+  
+  
+  /appointments/all:
+    get:
+      summary: Get all appointments
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Appointment'
+
 
   /appointments/{appointmentId}:
     get:
@@ -142,3 +194,13 @@ components:
           type: integer
         reason:
           type: string
+          
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
